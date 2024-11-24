@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/homepage.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-brand">Dashboard</div>
+    <button class="btn-secondary" th:href="@{/apiPAge}">API Page</button>
+    <form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    </form>
+    <button class="btn-logout" onclick="document.getElementById('logoutForm').submit();">Logout</button>
+
+</div>
+
+<div class="container">
+    <h1 class="page-title">User List</h1>
+    <table id="userTable" class="display">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#userTable').DataTable();
+    });
+</script>
+</body>
+</html>

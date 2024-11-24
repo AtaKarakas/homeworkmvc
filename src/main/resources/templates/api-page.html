@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/homepage.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-brand">Dashboard</div>
+    <button class="btn-secondary" th:href="@{/apiPAge}">API Page</button>
+    <form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    </form>
+    <button class="btn-logout" onclick="document.getElementById('logoutForm').submit();">Logout</button>
+
+</div>
+<div class="container">
+    <h2>Login Request</h2>
+    <form id="ajaxLoginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="button" id="ajaxLoginButton">Login via AJAX</button>
+    </form>
+    <div id="loginResponse" style="margin-top: 20px;"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#ajaxLoginButton').on('click', function () {
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            $.ajax({
+                url: 'http://localhost:8081/api/v3/merchant/user/login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ email: email, password: password }),
+                success: function (response) {
+                    $('#loginResponse').html('<p style="color: green;">Login Successful: ' + JSON.stringify(response) + '</p>');
+                },
+                error: function (xhr) {
+                    $('#loginResponse').html('<p style="color: red;">Login Failed: ' + xhr.responseText + '</p>');
+                }
+            });
+        });
+
+        $('#goToNewPageButton').on('click', function () {
+            window.location.href = '/newPage';
+        });
+    });
+</script>
+</body>
+</html>
